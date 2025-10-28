@@ -37,7 +37,10 @@ int main(int argc, char **argv)
             continue;
         }
 
-        printf("%sChecking file: %s\n%s", PINK, f->s, NC);
+        char *filename = strrchr(f->s, '/');
+        filename = filename ? filename + 1 : f->s;
+
+        printf("%sChecking file: %s\n%s", PINK, filename, NC);
 
         size_t nb_invalid = check_file(file, max_size, max_args, max_func);
 
