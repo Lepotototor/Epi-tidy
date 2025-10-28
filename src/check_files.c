@@ -107,6 +107,7 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
     char *func_name = NULL;
 
     bool in_comment = false;
+    bool in_string = false;
     bool in_function = false;
 
     while ((getline(&line, &n, file)) != EOF)
@@ -126,6 +127,8 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
                 break;
             else if (!in_comment && c == '/' && n == '*')
                 in_comment = true;
+            else if (!in_comment && c == '"')
+                in_string = !in_string;
             else if (in_comment && c == '*' && n == '/')
                 in_comment = false;
             else if (!in_comment && (isalnum(c) || c == ';'))
