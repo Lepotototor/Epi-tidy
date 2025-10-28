@@ -158,7 +158,7 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
         {
             while (strchr(trim_line, ')') == NULL)
             {
-                char *buffer;
+                char *buffer = NULL;
                 getline(&buffer, &n, file);
                 char *new_line = concatenete(trim_line, buffer);
                 free(trim_line);
@@ -174,7 +174,6 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
 
             if (is_countable_func(trim_line))
             {
-                puts(trim_line);
                 func_count++;
             }
         }
