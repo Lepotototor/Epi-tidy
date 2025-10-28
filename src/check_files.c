@@ -4,4 +4,11 @@
 #include <string.h>
 
 int check_file(FILE *file, size_t size_max, size_t max_args, size_t max_func)
-{}
+{
+  (void)file;
+  (void)size_max;
+  (void)max_args;
+  (void)max_func;
+
+  return 0;
+}

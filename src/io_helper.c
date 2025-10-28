@@ -10,7 +10,7 @@ void help(FILE *file, const char *pg_name)
 {
     if (file == stdout)
     {
-        fprintf(file, "%s\n\n", helpful);
+        printf( "%s\n\n", helpful);
     }
 
     fprintf(file, "Usage: %s <files>\n", pg_name);
@@ -52,15 +52,15 @@ str_list *check_args(char **argv, size_t *size_max, size_t *max_args,
         }
         else if (strcmp(argv[i], "-s") == 0)
         {
-            modify_arg(argv[i], "max lines number", size_max, files);
+            modify_arg(argv[++i], "max lines number", size_max, files);
         }
         else if (strcmp(argv[i], "-a") == 0)
         {
-            modify_arg(argv[i], "max arguments number", max_args, files);
+            modify_arg(argv[++i], "max arguments number", max_args, files);
         }
         else if (strcmp(argv[i], "-f") == 0)
         {
-            modify_arg(argv[i], "max functions number", max_func, files);
+            modify_arg(argv[++i], "max functions number", max_func, files);
         }
         else
         {

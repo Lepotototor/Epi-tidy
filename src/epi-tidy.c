@@ -15,18 +15,27 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    size_t max_size = 0;
-    size_t max_args = 0;
-    size_t max_func = 0;
+    size_t max_size = DEFAULT_MAX_SIZE;
+    size_t max_args = DEFAULT_MAX_ARGS;
+    size_t max_func = DEFAULT_MAX_FUNC;
 
     str_list *files = check_args(argv, &max_size, &max_args, &max_func);
+
+    printf("%sGonna check files with following values: %s\n", BLUE, NC);
+    printf("%sSize max: %s%zu\n%s", GREEN, YELLOW, max_size, NC);
+    printf("%sNum args max: %s%zu\n%s", GREEN, YELLOW, max_args, NC);
+    printf("%sNum func max: %s%zu\n%s", GREEN, YELLOW, max_func, NC);
+    putchar('\n');
 
     for (str_list *f = files; f; f = f->next)
     {
         FILE *file = fopen(f->s, "r");
 
         if (file == NULL)
-            fprintf(stderr, "Can't open file '%s' \n\n", f->s);
+        {
+            fprintf(stderr, "%sCan't open file '%s' \n\n%s", RED, f->s, NC);
+            continue;
+        }
 
         // check_file(file, max_size, max_args, max_func);
 
@@ -34,10 +43,6 @@ int main(int argc, char **argv)
 
         fclose(file);
     }
-
-    printf("Size max: %zu\n", max_size);
-    printf("Num args max: %zu\n", max_args);
-    printf("Num func max: %zu\n", max_func);
 
     str_list_destroy(files);
 
