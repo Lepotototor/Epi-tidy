@@ -21,7 +21,11 @@ debug: CFLAGS += -g -O0 -fsanitize=address
 debug: LDFLAGS += -g -O0 -fsanitize=address
 debug: $(BIN)
 
+gdb: CFLAGS += -g -O0
+gdb: LDFLAGS += -g -O0
+gdb: $(BIN)
+
 clean:
 	$(RM) $(OBJ) $(BIN)
 
-.PHONY: all debug clean
+.PHONY: all debug clean gdb

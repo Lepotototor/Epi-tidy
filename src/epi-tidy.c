@@ -37,9 +37,14 @@ int main(int argc, char **argv)
             continue;
         }
 
-        // check_file(file, max_size, max_args, max_func);
+        printf("%sChecking file: %s\n%s", PINK, f->s, NC);
 
-        printf("File: %s\n", f->s);
+        size_t nb_invalid = check_file(file, max_size, max_args, max_func);
+
+        if (nb_invalid == 0)
+        {
+            printf("%sNo error to report\n\n%s", CYAN, NC);
+        }
 
         fclose(file);
     }
