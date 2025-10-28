@@ -79,7 +79,7 @@ static bool get_result(char *func_name, size_t line_count, size_t arg_count,
     (void)max_args;
     if (line_count > max_line || arg_count > max_args)
     {
-        printf("%s Function %s%s%s exceed\n%s", RED, YELLOW, func_name, RED,
+        printf("%s Function %s%s%s  exceed\n%s", RED, YELLOW, func_name, RED,
                NC);
         printf("%sLines count: %s%zu%s\n", CYAN, RED, line_count, CYAN);
         printf("Args count: %s%zu%s\n%s", RED, arg_count, RED, NC);
