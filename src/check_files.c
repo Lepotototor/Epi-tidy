@@ -130,9 +130,9 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
                 in_comment = false;
             else if (!in_comment && (isalnum(c) || c == ';'))
                 countable_line = true;
-            else if (!in_comment && c == '{')
+            else if (!in_comment && c == '{' && n != '\'')
                 bra_count++;
-            else if (!in_comment && in_function && c == '}')
+            else if (!in_comment && in_function && c == '}' && n != '\'')
                 bra_count--;
         }
 
