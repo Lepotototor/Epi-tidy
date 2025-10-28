@@ -1,0 +1,16 @@
+*.o
+*.so
+*.a
+*.xz
+*.gz
+*.tar*
+*.txt
+*.pdf
+*.swp
+
+*.html
+*.css
+*.gcda
+*.gcno
+
+epit-tidy
