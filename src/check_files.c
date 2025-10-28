@@ -57,6 +57,21 @@ static char *get_func_name(char *line)
     return strndup(space, par - space);
 }
 
+static char *concatenete(char *s1, char *s2)
+{
+    size_t l1 = strlen(s1);
+    size_t l2 = strlen(s2);
+
+    char *res = malloc(l1 + l2 + 1);
+    if (res == NULL)
+        return NULL;
+
+    strcpy(res, s1);
+    strcpy(res + l1, s2);
+
+    return res;
+}
+
 static bool get_result(char *func_name, size_t line_count, size_t arg_count,
                        size_t max_line, size_t max_args)
 {
@@ -141,6 +156,18 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
         else if (!in_function && (bra_count || countable_line)
                  && strchr(trim_line, '(') && strchr(trim_line, ' ') != NULL)
         {
+            while (strchr(trim_line, ')') == NULL)
+            {
+                char *buffer;
+                getline(&buffer, &n, file);
+                char *new_line = concatenete(trim_line, buffer);
+                free(trim_line);
+                free(buffer);
+
+                line = new_line;
+                trim_line = trim(new_line);
+            }
+
             in_function = true;
             func_name = get_func_name(trim_line);
             arg_count = get_arg_count(trim_line);
