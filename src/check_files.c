@@ -180,9 +180,6 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
                 func_count++;
             }
         }
-
-        free(line);
-        line = NULL;
     }
     free(line);
 
