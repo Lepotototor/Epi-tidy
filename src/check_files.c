@@ -33,16 +33,27 @@ static bool is_countable_func(char *line)
     return strstr(line, "static ") == NULL;
 }
 
-static size_t get_arg_count(char *line)
+static size_t get_arg_count(char *line, bool *correct_void)
 {
+    char *parameters = strchr(line, '(');
+    char *end = strchr(line, ')');
+    if (end)
+        *end = 0;
+
+    char *trim_line = trim(parameters);
+    *correct_void = *trim_line != 0;
+
     size_t res = 0;
 
-    char *machalla = strchr(line, ',');
+    char *machalla = strchr(parameters, ',');
     while (machalla)
     {
         res = res ? res + 1 : 2;
         machalla = strchr(machalla + 1, ',');
     }
+
+    if (end)
+        *end = ')';
 
     return res;
 }
@@ -72,22 +83,29 @@ static char *concatenete(char *s1, char *s2)
     return res;
 }
 
-static bool get_result(char *func_name, size_t line_count, size_t arg_count,
-                       size_t max_line, size_t max_args)
+static int unused()
 {
-    (void)max_line;
-    (void)max_args;
+    return 42;
+}
+
+static bool get_result(char *func_name, size_t line_count, size_t arg_count,
+                       size_t max_line, size_t max_args, bool correct_void)
+{
+    (void)unused;
     if (line_count > max_line || arg_count > max_args)
     {
         printf("%s Function %s%s%s  exceed\n%s", RED, YELLOW, func_name, RED,
                NC);
         printf("%sLines count: %s%zu%s\n", CYAN, RED, line_count, CYAN);
-        printf("Args count: %s%zu%s\n%s", RED, arg_count, RED, NC);
+        printf("Args count: %s%zu%s\n", RED, arg_count, RED);
 
         putchar('\n');
 
         return true;
     }
+
+    if (!correct_void)
+        printf("Void function must have void as parameter\n%s", NC);
 
     return false;
 }
@@ -109,6 +127,7 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
     bool in_comment = false;
     bool in_string = false;
     bool in_function = false;
+    bool valid_void = false;
 
     while ((getline(&line, &n, file)) != EOF)
     {
@@ -146,8 +165,8 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
         else if (in_function && bra_count == 0)
         {
             in_function = false;
-            if (get_result(func_name, line_count, arg_count, max_line,
-                           max_args))
+            if (get_result(func_name, line_count, arg_count, max_line, max_args,
+                           valid_void))
                 nb_invalid++;
 
             line_count = 0;
@@ -173,7 +192,7 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
 
             in_function = true;
             func_name = get_func_name(trim_line);
-            arg_count = get_arg_count(trim_line);
+            arg_count = get_arg_count(trim_line, &valid_void);
 
             if (is_countable_func(trim_line))
             {
@@ -184,7 +203,8 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
     free(line);
 
     if (func_name
-        && get_result(func_name, line_count, arg_count, max_line, max_args))
+        && get_result(func_name, line_count, arg_count, max_line, max_args,
+                      valid_void))
         nb_invalid++;
 
     free(func_name);
