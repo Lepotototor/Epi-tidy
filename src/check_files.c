@@ -40,7 +40,7 @@ static size_t get_arg_count(char *line, bool *correct_void)
     if (end)
         *end = 0;
 
-    char *trim_line = trim(parameters);
+    char *trim_line = trim(parameters + 1);
     *correct_void = *trim_line != 0;
 
     size_t res = 0;
@@ -94,7 +94,7 @@ static bool get_result(char *func_name, size_t line_count, size_t arg_count,
     (void)unused;
     if (line_count > max_line || arg_count > max_args)
     {
-        printf("%s Function %s%s%s  exceed\n%s", RED, YELLOW, func_name, RED,
+        printf("%s Function %s%s%s  invalid\n%s", RED, YELLOW, func_name, RED,
                NC);
         printf("%sLines count: %s%zu%s\n", CYAN, RED, line_count, CYAN);
         printf("Args count: %s%zu%s\n", RED, arg_count, RED);
@@ -105,7 +105,13 @@ static bool get_result(char *func_name, size_t line_count, size_t arg_count,
     }
 
     if (!correct_void)
-        printf("Void function must have void as parameter\n%s", NC);
+    {
+        printf("%s Function %s%s%s  invalid\n%s", RED, YELLOW, func_name, RED,
+               NC);
+        printf("%sVoid function must have void as parameter\n%s", RED, NC);
+
+        putchar('\n');
+    }
 
     return false;
 }
