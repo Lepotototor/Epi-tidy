@@ -44,6 +44,19 @@ static size_t get_arg_count(char *line)
         machalla = strchr(machalla + 1, ',');
     }
 
+    if (res == 0)
+    {
+        char *c = strchr(line, '(') + 1;
+        while (*c && *c != ')')
+        {
+            if (isalnum(*c))
+            {
+                res = 1;
+                break;
+            }
+        }
+    }
+
     return res;
 }
 
@@ -135,7 +148,7 @@ size_t check_file(FILE *file, size_t max_line, size_t max_args, size_t max_func)
                 countable_line = true;
             else if (!in_comment && c == '{' && n != '\'')
                 bra_count++;
-            else if (!in_comment && in_function && c == '}' && n != '\'')
+            else if (!in_comment && c == '}' && n != '\'')
                 bra_count--;
         }
 
