@@ -36,7 +36,7 @@ static bool is_countable_func(char *line)
 static size_t get_arg_count(char *line, bool *valid_void)
 {
     char *parameters = strchr(line, '(');
-    char *end = strchr(line, ')');
+    char *end = strrchr(line, ')');
     if (end)
         *end = 0;
 
@@ -48,7 +48,7 @@ static size_t get_arg_count(char *line, bool *valid_void)
 
     size_t res = 0;
 
-    char *machalla = strchr(parameters, ',');
+    char *machalla = strrchr(parameters, ',');
     while (machalla)
     {
         res = res ? res + 1 : 2;
@@ -73,7 +73,7 @@ static size_t get_arg_count(char *line, bool *valid_void)
 
 static char *get_func_name(char *line)
 {
-    char *par = strchr(line, '(');
+    char *par = strrchr(line, '(');
     *par = 0;
     char *space = strrchr(line, ' ');
     *par = '(';
